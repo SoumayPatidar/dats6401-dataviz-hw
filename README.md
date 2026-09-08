@@ -62,12 +62,3 @@ week1_hw/
     └── ... (other F1 CSVs)
 ```
 
----
-
-## Deploy to Streamlit Community Cloud (Free)
-
-1. Push this folder to a **GitHub repository** (public or private).
-2. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
-3. Click **"New app"**: select your repo, branch, and `app.py`.
-4. Click **"Deploy"**: Streamlit installs from `requirements.txt` automatically.
-5. Share the generated URL.
