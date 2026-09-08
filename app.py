@@ -1,32 +1,29 @@
-# ============================================================
-# DATS 6401 — Visualization of Complex Data
+
+# DATS 6401 : Visualization of Complex Data
 # Week 1 Homework: Foundations & Setup
 # Author: Soumay Patidar
 # Dataset: Formula 1 World Championship (1950–2024)
 # Run:  streamlit run app.py
-# ============================================================
 
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# ── Page configuration ──────────────────────────────────────
 st.set_page_config(
     page_title="F1 Data Explorer",
     page_icon="🏎️",
     layout="wide",
 )
 
-# ── Title & description ─────────────────────────────────────
-st.title("🏎️ Formula 1 World Championship — Data Explorer")
+st.title("🏎️ Formula 1 World Championship: Data Explorer")
 
 st.markdown(
     """
     ### About the Dataset
 
     This app explores the **Formula 1 World Championship** dataset, which spans
-    every race from **1950 to 2024** — over 70 years of motorsport history.  The
-    data comes from the [Ergast Developer API](http://ergast.com/mrd/) and
+    every race from **1950 to 2024** over 70 years of motorsport history.  The
+    data comes from the [Kaggle dataset](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020) and
     contains **14 interrelated CSV files** covering races, results, drivers,
     constructors, circuits, lap times, pit stops, qualifying sessions, standings,
     and more.
@@ -39,13 +36,12 @@ st.markdown(
     The dataset is a rich example of *complex, relational tabular data*: each
     file has a different grain (one row per race, per result, per lap, etc.) and
     they link together through shared ID columns (`raceId`, `driverId`,
-    `constructorId`, `circuitId`).  Most columns are already **tidy** — each
-    variable is a column and each observation is a row — although some cleanup is
+    `constructorId`, `circuitId`).  Most columns are already **tidy**, each
+    variable is a column and each observation is a row, although some cleanup is
     needed (e.g., `\\N` as a null marker, lap times stored as strings).
     """
 )
 
-# ── Load and merge data ─────────────────────────────────────
 @st.cache_data
 def load_data():
     """Load core F1 tables and merge into a single results frame."""
@@ -72,7 +68,6 @@ def load_data():
 
 df = load_data()
 
-# ── Data preview ─────────────────────────────────────────────
 st.markdown("### 📋 Data Preview")
 st.markdown(
     f"The merged results table has **{df.shape[0]:,} rows** and "
@@ -93,14 +88,13 @@ with st.expander("Column types (measure vs. category)"):
     })
     st.dataframe(col_info, use_container_width=True)
 
-# ── Main chart ───────────────────────────────────────────────
 st.markdown("---")
 st.markdown("### 🏆 Top 10 Drivers by All-Time Race Wins")
 st.markdown(
     """
     The bar chart below ranks the **ten most successful F1 drivers** by the
     total number of race victories in their career (1950–2024).  Each bar's
-    **length** encodes the win count — a positional channel that humans read
+    **length** encodes the win count, a positional channel that humans read
     with the highest accuracy (Cleveland & McGill, 1984).  Bars are colored by
     the driver's **nationality**, adding a categorical layer without sacrificing
     readability.
@@ -108,7 +102,7 @@ st.markdown(
     **What the chart shows:** Lewis Hamilton leads the all-time list with over
     100 wins, followed by Michael Schumacher.  Max Verstappen, still active, has
     already climbed to third.  The chart makes the magnitude of Hamilton's and
-    Schumacher's dominance immediately clear — a gap that would be hard to
+    Schumacher's dominance immediately clear, a gap that would be hard to
     convey in a table alone.
     """
 )
@@ -120,7 +114,7 @@ wins = (
     .size()
     .reset_index(name="wins")
     .nlargest(10, "wins")
-    .sort_values("wins", ascending=True)  # ascending for horizontal bar
+    .sort_values("wins", ascending=True)  
 )
 
 fig = px.bar(
@@ -129,7 +123,7 @@ fig = px.bar(
     y="driver",
     color="nationality",
     orientation="h",
-    title="All-Time F1 Race Wins — Top 10 Drivers",
+    title="All Time F1 Race Wins: Top 10 Drivers",
     labels={"wins": "Number of Race Wins", "driver": "", "nationality": "Nationality"},
     color_discrete_sequence=px.colors.qualitative.Set2,
 )
@@ -141,7 +135,6 @@ fig.update_layout(
 )
 st.plotly_chart(fig, use_container_width=True)
 
-# ── Optional extension: interactive widget ───────────────────
 st.markdown("---")
 st.markdown("### 🔧 Interactive Explorer (Bonus)")
 st.markdown("Use the controls below to explore different slices of the data.")
@@ -188,10 +181,10 @@ fig2 = px.scatter(
 fig2.update_layout(height=500, margin=dict(l=20, r=20, t=50, b=20))
 st.plotly_chart(fig2, use_container_width=True)
 
-# ── Footer ───────────────────────────────────────────────────
+
 st.markdown("---")
 st.caption(
-    "DATS 6401 · Week 1 Homework · Soumay Patidar · "
+    "DATS 6401 - Week 1 Homework - Soumay Patidar "
     "Data: Ergast F1 Database (1950–2024)"
 )
 
